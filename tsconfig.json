@@ -1,3 +1,27 @@
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": ".",
+    "jsx": "react",
+    "lib": ["ES6"],
+    "paths": {
+      "~/*": ["./src/*"],
+      "icons/*": ["./src/components/icons/*"],
+      "colors": ["./src/styles/colors"],
+      "test/*": ["test/*"],
+      "underscore": ["lodash"],
+    },
+    "resolveJsonModule": true,
+    "strict": true,
+    "target": "ESNext",
+  },
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jestSetupFile.js",
+    ".eslintrc.js",
+    "./src/navigation/Routes.constants.ts"
+  ]
 }
