@@ -33,6 +33,11 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+.java-version
+**/caches
+**/daemon
+**/native
+**/wrapper
 
 # node.js
 #
