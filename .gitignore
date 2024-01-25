@@ -34,10 +34,14 @@ local.properties
 *.keystore
 !debug.keystore
 .java-version
+.tmp
+kotlin-profile
 **/caches
 **/daemon
 **/native
 **/wrapper
+**/jdks
+**/android
 
 # node.js
 #
