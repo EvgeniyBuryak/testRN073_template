@@ -11,13 +11,13 @@ const config = {
       getTransformOptions: async () => ({
         transform: {
           experimentalImportSupport: false,
-          inlineRequires: true,
+          inlineRequires: false,
         },
       }),
     },
-    resolver: {
-      sourceExts: ['jsx', 'js', 'ts', 'tsx'],
-    },
+    // resolver: {
+    //   sourceExts: ['.jsx', '.js', '.ts', '.tsx', '.json'],
+    // },
   };
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);
