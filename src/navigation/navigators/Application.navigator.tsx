@@ -1,18 +1,29 @@
-import React from "react"
+import React, { useEffect } from "react"
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "../Routes.constants";
 import StartScreen from "~/features/start";
+import AuthScreen from "~/auth/Auth.screen";
+import { IAuthStore } from "~/auth/Auth.store";
 
 const initialSwitchRoute = Routes.InitialScreen;
 
-interface IRootStackProps {}
+interface IRootStackProps {
+  auth: IAuthStore;
+}
 
-const isAuthorized= undefined;
+const isAuthorized = undefined;
 
 const RootStackNavigator: React.FC<IRootStackProps> = (props: IRootStackProps) => {
   const Stack = createStackNavigator();
+  const { isAuthorized, setAuthorizationStatus } = props.auth || {};
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAuthorizationStatus(false);
+    }, 5000);
+  }, []);
 
   return (
     <NavigationContainer>
@@ -35,7 +46,7 @@ const RootStackNavigator: React.FC<IRootStackProps> = (props: IRootStackProps) =
         ) : (
           <Stack.Screen
             name={Routes.AuthNavigator}
-            component={StartScreen}
+            component={AuthScreen}
             options={{
                 headerShown: false,
             }}
