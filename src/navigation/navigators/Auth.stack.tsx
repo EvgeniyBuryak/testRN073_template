@@ -1,7 +1,7 @@
 import React from 'react';
 import Routes from '~/navigation/Routes.constants';
 import { createStackNavigator } from '@react-navigation/stack';
-import AuthScreen from '~/auth';
+import AuthScreen from '~/features/auth';
 
 export const initialRoute = Routes.AuthScreen;
 

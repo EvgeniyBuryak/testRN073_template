@@ -4,8 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "../Routes.constants";
 import StartScreen from "~/features/start";
-import AuthScreen from "~/auth/Auth.screen";
-import { IAuthStore } from "~/auth/Auth.store";
+import AuthScreen from "~/features/auth/Auth.screen";
+import { IAuthStore } from "~/features/auth/Auth.slice";
 
 const initialSwitchRoute = Routes.InitialScreen;
 
