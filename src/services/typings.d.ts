@@ -1,3 +1,6 @@
+
+declare var __DEV__: boolean;
+
 type TOfferSpecial = {
     id: number,
     url: string,
