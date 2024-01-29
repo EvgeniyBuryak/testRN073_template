@@ -1,37 +1,17 @@
-import axios, { AxiosError, AxiosRequestConfig, isAxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse, isAxiosError } from "axios";
 
 const MainHttpService = () => {
 
   const _API_GET_URL = 'https://api.pik.ru/v2/offer';
   const _API_POST_URL = 'https://strapi.pik.ru';
 
-  const fetch = async (url: string, config: AxiosRequestConfig | undefined):
-    Promise<{ response: Response, body: any }> => {
-
-    const tryParseJson = async (data: string) => {
-      try {
-        return await JSON.parse(data);
-      } catch (error: any) {
-        console.error('*---tryParseJson', error);
-        return data;
-      }
-    };
-
-    const requestAxios = await axios.create({ url, ...config || {} });
-    const bodyInterceptors = requestAxios.interceptors.response.use(
-      response => {
-        return tryParseJson(response.data);
-      }
-    );
-    const response = requestAxios.request({});
-    
-    if (!response) throw response;
-    const body = (await response).data;
-
-    // if (response.) {
-    //     console.log('response', body, url);
-    //     return { response, body };
-    // }
+  const tryParseJson = async (data: string) => {
+    try {
+      return await JSON.parse(data);
+    } catch (error: any) {
+      console.error('*---tryParseJson', error);
+      return data;
+    }
   };
 
   const handleErrors = (error: AxiosError) => {
@@ -50,30 +30,43 @@ const MainHttpService = () => {
   return {
     receiveOfferSpecial: async () => {
       try {
-        const response = await axios.get(`${_API_GET_URL}/special?types=1,2&locations=2,3`);
-        return response.data;  
+        const response: AxiosResponse<string, any> = await axios.get(
+            `${_API_GET_URL}/special?types=1,2&locations=2,3`
+          );
+
+        const parseData = typeof response.data === 'string'
+        ? tryParseJson(response.data)
+        : null;
+
+        return parseData;
       } catch (error: any | AxiosError) {
         if (isAxiosError(error)) {
-            handleErrors(error)
+          handleErrors(error)
         } else {
-            console.error('*---receiveOfferSpecial', error);
+          console.error('*---receiveOfferSpecial', error);
         }
       }
     },
-    sendTest: async () => {
+    sendFrontTest: async () => {
       try {
-        
-        const response = await axios.post(`${_API_POST_URL}/front-tests`);
-        return response.data;
+        const response: AxiosResponse<TFrontTest, any> = await axios.post(
+          `${_API_POST_URL}/front-tests`
+        );
+
+        const parseData = typeof response.data === 'string'
+        ? tryParseJson(response.data)
+        : null;
+
+        return parseData;
       } catch (error: any | AxiosError) {
         if (isAxiosError(error)) {
-            handleErrors(error)
+          handleErrors(error)
         } else {
-            console.error('*---sendTest', error);
+          console.error('*---sendTest', error);
         }
       }
-    }
+    },
   }
 };
 
-export default MainHttpService;
+export default MainHttpService();

@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import { Control, useController, useForm } from "react-hook-form";
 import Button from '~/components/Button';
+import { receiveOfferSpecial, sendFrontTest } from "./Auth.slice";
+import { useDispatch, useSelector } from "react-redux";
 
 interface IAuthScreenProps {}
 
@@ -25,6 +27,14 @@ const Input: React.FC<{ name: string, control: Control }> = ({ name, control }) 
 const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   const { control, handleSubmit } = useForm();
   const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
+  const dispatch = useDispatch();
+  const offerSpecial = useSelector((state) => state.auth.offerSpecial);
+
+  useEffect(() => {
+    dispatch(receiveOfferSpecial());
+    console.log('456--->', offerSpecial);
+  }, []);
+
   render++;
 
   return (

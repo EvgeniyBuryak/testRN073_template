@@ -10,7 +10,7 @@ import authReducer from '~/features/auth/Auth.slice'
 interface Props {}
 
 const reducer = {
-  'auth': authReducer,
+  "auth": authReducer,
 }
 
 const store = configureStore({ reducer });

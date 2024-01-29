@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
 import Colors from "colors";
+import { receiveOfferSpecial, setAuthorizationStatus } from "~/features/auth/Auth.slice";
+import { useDispatch, useSelector } from "react-redux";
 
 interface IStartScreenProps {}
 
 const StartScreen: React.FC<IStartScreenProps> = (props: IStartScreenProps) => {
-    return (
-      <View style={styles.mainContainer}>
-        <Text style={styles.title}></Text>
-        <ActivityIndicator size='large' color={Colors.Base} />
-      </View>
-    );
+  // const isAuthorized = useSelector((state) => state.auth.isAuthorized);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(setAuthorizationStatus(false));
+      // dispatch(receiveOfferSpecial());
+      console.log('123--->')
+    }, 3000);
+  }, []);
+
+  return (
+    <View style={styles.mainContainer}>
+      <Text style={styles.title}></Text>
+      <ActivityIndicator size='large' color={Colors.Base} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
