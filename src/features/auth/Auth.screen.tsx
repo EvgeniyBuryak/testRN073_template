@@ -51,6 +51,18 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
 
   render++;
 
+  const renderError = (field: string, secondaryMessage: string) => {
+    return (
+      <View style={{ height: errors[field] ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}>
+        {errors[field]?.type === "required"
+        ? <Text style={styles.error}>Заполните поле</Text>
+        : errors[field]?.type === "pattern"
+          ? <Text style={styles.error}>{secondaryMessage}</Text>
+          : null}
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.top}>
@@ -62,65 +74,61 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           control={control}
           name="firstName"
           placeholder="Ваше имя"
-          // required={true} // TODO return
-          pattern={/[а-яА-ЯёЁ]{1}/}
-          textStyle={control._defaultValues.firstName?.length <= 0 ? { backgroundColor: Colors.GrayL } : {}}
+          required={true}
+          // pattern={/[а-яА-ЯёЁ]{1}/} // TODO return
+          pattern={/^[a-zA-Z]+$/}
+          textStyle={errors?.firstName
+            ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
+            : {}
+          }
+          placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayM}
         />
-        <View style={{ height: errors?.firstName ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}>
-          {errors?.firstName?.type === "required"
-          ? <Text style={styles.error}>Заполните поле</Text>
-          : errors?.firstName?.type === "pattern"
-            ? <Text style={styles.error}>Требуется имя.</Text>
-            : null}
-        </View>
+        {renderError("firstName", "Требуется имя.")}
         <CustomTextInput
           control={control}
           name="lastName"
           placeholder="Ваша фамилия"
-          pattern={/[а-яА-ЯёЁ]/}
+          pattern={/^[а-яА-ЯёЁ]+$/}
         />
-        <View style={{ height: errors?.lastName ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}></View>
+        {renderError("lastName", "Требуется фамилия.")}
         <CustomTextInput
           control={control}
           name="phone"
           required={true}
           placeholder='Телефон'
           rules={{ required: true, pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/ }}
+          textStyle={errors?.phone
+            ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
+            : {}
+          }
+          placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayM}
         />
-        <View style={{ height: errors?.phone ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}>
-          {errors?.phone?.type === "required"
-          ? <Text style={styles.error}>Заполните поле</Text>
-          : errors?.phone?.type === "pattern"
-            ? <Text style={styles.error}>Требуется номер телефона.</Text>
-            : null}
-        </View>
+        {renderError("phone", "Требуется номер телефона.")}
         <CustomTextInput
           control={control}
           name="email"
           rules={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
           placeholder="E-mail"
+          textStyle={errors?.email
+            ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
+            : {}
+          }
+          placeholderTextColor={errors?.email ? Colors.Error : Colors.GrayM}
         />
-        <View style={{ height: errors?.email ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}>
-          {errors?.email?.type === "required"
-          ? <Text style={styles.error}>Заполните поле</Text>
-          : errors?.email?.type === "pattern"
-            ? <Text style={styles.error}>Требуется электронная почта.</Text>
-            : null}
-        </View>
+        {renderError("email", "Требуется электронная почта.")}
         <CustomTextInput
           control={control}
           name="number"
           placeholder="Укажите количество помещений"
           rules={{ required: true, pattern: /^[0-9]+$/ }}
           keyboardType="number-pad"
+          textStyle={errors?.number
+            ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
+            : {}
+          }
+          placeholderTextColor={errors?.number ? Colors.Error : Colors.GrayM}
         />
-        <View style={{ height: errors?.number ? HEIGHT_ERROR : HEIGHT_NOT_ERROR }}>
-          {errors?.number?.type === "required"
-            ? <Text style={styles.error}>Заполните поле</Text>
-            : errors?.number?.type === "pattern"
-              ? <Text style={styles.error}>Только цифры</Text>
-              : null}
-        </View>
+        {renderError("number", "Вводить только цифры.")}
         <Button
           title={watchButton
             ? `Забронировать ${getNoun(Number(getValues("number")), 'помещение', 'помещения', 'помещений')}`

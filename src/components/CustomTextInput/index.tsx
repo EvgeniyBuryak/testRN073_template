@@ -12,6 +12,7 @@ const CustomTextInput: React.FC<{
   textStyle?: TextStyle,
   keyboardType?: KeyboardTypeOptions,
   rules?: Omit<RegisterOptions<FieldValues, string>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> | undefined,
+  placeholderTextColor?: string,
 }> = ({
   name,
   control,
