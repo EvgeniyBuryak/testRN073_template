@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleSheet, Text, Pressable, ViewStyle } from 'react-native';
 import Colors from 'colors';
 
 interface IButtonProps {
@@ -26,13 +26,29 @@ const Button: React.FC<IButtonProps> = ({
   stylesView,
 }: IButtonProps) => {
   return (
-    <TouchableOpacity
+    <Pressable
       disabled={disabled}
-      style={[styles.button, { backgroundColor, width, height }, stylesView]}
+      style={({pressed}) => [
+        {
+          backgroundColor: disabled
+              ? Colors.White
+              : pressed
+                ? Colors.PressedLoading
+                : Colors.Default
+        },
+        styles.button, { width, height }, stylesView
+      ]}
       onPress={onPress}
     >
-      <Text style={[styles.buttonTitle, { color: titleColor, fontSize }]}>{title}</Text>
-    </TouchableOpacity>
+      <Text style={
+        [styles.buttonTitle, {
+          color: disabled
+              ? Colors.GrayL
+              : Colors.White,
+          fontSize,
+        }
+        ]}>{title}</Text>
+    </Pressable>
   );
 };
 
@@ -42,7 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: Colors.Base // TODO change
+    shadowColor: Colors.Default,
   },
   buttonTitle: {
     paddingVertical: 5,
@@ -54,7 +70,7 @@ const styles = StyleSheet.create({
 });
 
 Button.defaultProps = {
-  backgroundColor: Colors.Base, // TODO change
+  backgroundColor: Colors.Default,
   titleColor: '#fff',
   disabled: false,
   stylesView: {},
