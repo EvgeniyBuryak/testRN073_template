@@ -1,68 +1,23 @@
 import React, { useEffect } from "react";
-import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
-import { Control, useController, useForm, Controller, FieldValues } from "react-hook-form";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import { useForm } from "react-hook-form";
 import Button from '~/components/Button';
 import { receiveOfferSpecial, sendFrontTest } from "./Auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import Colors from "~/styles/colors";
+import CustomTextInput from "~/components/CustomTextInput";
 
 interface IAuthScreenProps {}
 
 let render = 0;
 
-const Input: React.FC<{
-  name: string,
-  control: Control<FieldValues>,
-  placeholder?: string,
-  required?: boolean,
-  pattern?: RegExp,
-}> = ({
-  control,
-  placeholder,
-  required,
-  pattern,
-  ...props
-}) => {
-  // const { field } = useController({
-    // control,
-    // defaultValue: '',
-    // name,
-    // rules: { required, pattern }
-  // });
-  return (
-    <>
-    <Controller
-      {...props}
-      control={control}
-      rules={{ required, pattern }}
-      render={({ field: { value, onChange, ref }}) => (
-        <TextInput
-          value={value}
-          onChangeText={onChange}
-          style={styles.input}
-          ref={ref}
-          placeholder={placeholder}
-        />
-      )}
-    />
-    </>
-  );
-}
-
 const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      number: "",
-    },
-  });
+    formState: { errors, isDirty, dirtyFields },
+  } = useForm();
+
   const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
   const dispatch = useDispatch();
   const offerSpecial = useSelector((state) => state.auth.offerSpecial);
@@ -71,6 +26,10 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
     dispatch(receiveOfferSpecial());
     console.log('456--->', offerSpecial);
   }, []);
+
+  // console.log('isDirty---> ', isDirty)
+  // console.log('dirtyFields---> ', dirtyFields)
+  console.log('errors---> ', JSON.stringify(errors))
 
   render++;
 
@@ -81,41 +40,60 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
         <Text style={styles.description}>Для бронирования помещений заполните форму</Text>
       </View>
       <View style={styles.section}>
-        <Input
+        <CustomTextInput
           control={control}
           name="firstName"
           placeholder="Ваше имя"
-          required={true}
+          // required={true} // TODO return
           pattern={/[а-яА-ЯёЁ]{1}/}
+          textStyle={control._defaultValues.firstName?.length <= 0 ? { backgroundColor: Colors.GrayL } : {}}
         />
-        {errors.firstName && <Text>Требуется имя.</Text>}
-        <Input
+        {errors.firstName?.type === "required"
+        ? <Text>Заполните поле</Text>
+        : errors.firstName?.type === "pattern"
+          ? <Text>Требуется имя.</Text>
+          : null}
+        <CustomTextInput
           control={control}
           name="lastName"
           placeholder="Ваша фамилия"
           pattern={/[а-яА-ЯёЁ]/}
         />
-        <Input
+        <CustomTextInput
           control={control}
           name="phone"
           required={true}
           placeholder='Телефон'
+          rules={{ required: true, pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/ }}
         />
-        {errors.phone && <p>Требуется номер телефона.</p>}
-        <Input
+        {errors.phone?.type === "required"
+        ? <Text>Заполните поле</Text>
+        : errors.phone?.type === "pattern"
+          ? <Text>Требуется номер телефона.</Text>
+          : null}
+        <CustomTextInput
           control={control}
           name="email"
-          required={true}
+          rules={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
           placeholder="E-mail"
         />
-        {errors.email && <p>Требуется почта.</p>}
-        <Input
+        {errors.email?.type === "required"
+        ? <Text>Заполните поле</Text>
+        : errors.email?.type === "pattern"
+          ? <Text>Требуется электронная почта.</Text>
+          : null}
+        <CustomTextInput
           control={control}
           name="number"
-          required={true}
           placeholder="Укажите количество помещений"
+          rules={{ required: true, pattern: /^[0-9]+$/ }}
+          keyboardType="number-pad"
         />
-        {errors.number && <p>Введите количество</p>}
+        {errors.number?.type === "required"
+          ? <Text>Заполните поле</Text>
+          : errors.number?.type === "pattern"
+            ? <Text>Только цифры</Text>
+            : null}
         <Button
           title="Забронировать"
           onPress={handleSubmit(onSubmit)}
@@ -156,12 +134,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     color: Colors.Black,
-  },
-  input: {
-    borderWidth: 2,
-    borderRadius: 4,
-    borderColor: Colors.Gray,
-    height: 56,
   },
   section: {
     justifyContent: 'space-between',
