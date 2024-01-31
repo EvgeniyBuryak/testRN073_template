@@ -1,20 +1,19 @@
 import React from 'react';
-import { KeyboardTypeOptions, StyleSheet, TextInput, TextStyle, Text, View } from 'react-native';
+import { StyleSheet, TextInput, TextStyle, Text, View } from 'react-native';
 import { Control, useController, FieldValues, RegisterOptions } from "react-hook-form";
 import Colors from '~/styles/colors';
 
-const CustomTextInput: React.FC<{
+type TextInputCustomProps =  TextInput & {
+  textStyle?: TextStyle,
   name: string,
   control: Control<FieldValues>,
-  placeholder?: string,
   required?: boolean,
   pattern?: RegExp,
-  textStyle?: TextStyle,
-  keyboardType?: KeyboardTypeOptions,
   rules?: Omit<RegisterOptions<FieldValues, string>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> | undefined,
-  placeholderTextColor?: string,
   prompt?: string,
-}> = ({
+};
+
+const TextInputCustom: React.FC<TextInputCustomProps> = ({
   name,
   control,
   required,
@@ -45,8 +44,9 @@ const CustomTextInput: React.FC<{
           value={value}
           onChangeText={onChange}
           style={
-              prompt?.length && value?.length ? 
-            styles.text : {
+            prompt?.length && value?.length
+            ? styles.text
+            : {
               padding: 10
             }
           }
@@ -57,9 +57,8 @@ const CustomTextInput: React.FC<{
   );
 }
 
-CustomTextInput.defaultProps = {
+TextInputCustom.defaultProps = {
   required: false,
-  keyboardType: 'default',
 };
 
 const styles = StyleSheet.create({
@@ -90,5 +89,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomTextInput;
+export default TextInputCustom;
   

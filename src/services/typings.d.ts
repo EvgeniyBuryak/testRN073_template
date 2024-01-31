@@ -1,5 +1,10 @@
 
 declare var __DEV__: boolean;
+declare module '*.json' {
+  const value: { [key: string]: any };
+  export default value;
+}
+// declare module "react-hook-form";
 
 type TOfferSpecial = {
     id: number,

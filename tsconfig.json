@@ -8,14 +8,15 @@
     "isolatedModules": true,
     "jsx": "react",
     "lib": ["es6"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noResolve": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
     "noEmit": true,
     "paths": {
       "~/*": ["./src/*"],
-      // "{rootPathPrefix}/*": ["./src/*"],
-      // "@assets/*": ["src/*/assets/*"],
-      // "icons/*": ["./src/components/icons/*"],
       "colors": ["./src/styles/colors"]
     },
     "resolveJsonModule": true,
@@ -24,7 +25,7 @@
     "useDefineForClassFields": true
   },
   "exclude": [
-    "node_modules",
+    "./node_modules/**/*",
     "babel.config.js",
     "metro.config.js",
     "jestSetupFile.js",

@@ -20,8 +20,11 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
     handleSubmit,
     getValues,
     watch,
+    setFocus,
     formState: { errors, isDirty, dirtyFields },
-  } = useForm<FormInputs>();
+  } = useForm<FormInputs>({
+    mode: "onBlur",
+  });
 
   const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
   const dispatch = useDispatch();
@@ -46,7 +49,6 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   // console.log('isDirty---> ', isDirty)
   // console.log('dirtyFields---> ', dirtyFields)
   console.log('errors---> ', JSON.stringify(errors))
-  console.log('control---> ', JSON.stringify(control))
 
   render++;
 
@@ -74,9 +76,8 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           name="firstName"
           placeholder="Ваше имя"
           prompt={"Имя"}
-          required={true}
           // pattern={/^[а-яА-ЯёЁ]+$/} // TODO return
-          pattern={/^[a-zA-Z]+$/}
+          rules={{ required: true, pattern: /^[a-zA-Z]+$/ }}
           textStyle={errors?.firstName
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("firstName")
@@ -84,6 +85,9 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
                 : {}
           }
           placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayM}
+          onSubmitEditing={() => {
+            setFocus("lastName");
+          }}
         />
         {renderError("firstName", "Требуется имя.")}
         <CustomTextInput
@@ -91,16 +95,25 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           name="lastName"
           placeholder="Ваша фамилия"
           prompt={"Фамилия"}
-          pattern={/^[а-яА-ЯёЁ]+$/}
+          // pattern={/^[а-яА-ЯёЁ]+$/} // TODO return
+          rules={{ pattern: /^[a-zA-Z]+$/ }}
+          textStyle={errors?.lastName
+            ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
+            : watch("lastName")
+              ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
+                : {}
+          }
+          onSubmitEditing={() => {
+            setFocus("phone");
+          }}
         />
         {renderError("lastName", "Требуется фамилия.")}
         <CustomTextInput
           control={control}
           name="phone"
-          required={true}
           placeholder='Телефон'
           prompt={"Телефон"}
-          rules={{ required: true, pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/ }}
+          rules={{ required: true, pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/ }} // prompt: +7 (999) 111-22-33
           textStyle={errors?.phone
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("phone")
@@ -108,6 +121,9 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
                 : {}
           }
           placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayM}
+          onSubmitEditing={() => {
+            setFocus("email");
+          }}
         />
         {renderError("phone", "Требуется номер телефона.")}
         <CustomTextInput
@@ -123,6 +139,10 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
                 : {}
           }
           placeholderTextColor={errors?.email ? Colors.Error : Colors.GrayM}
+          onSubmitEditing={() => {
+            setFocus("number");
+          }}
+          
         />
         {renderError("email", "Требуется электронная почта.")}
         <CustomTextInput
