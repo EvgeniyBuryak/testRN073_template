@@ -26,3 +26,9 @@ type TFrontTest = {
 	created_at: string,
 	updated_at: string,
 };
+
+type TOverviewPhoto = {
+  id_attachments: number;
+  filename: string;
+  content: string;
+};

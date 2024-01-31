@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useForm } from "react-hook-form";
 import Button from '~/components/Button';
@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "~/styles/colors";
 import CustomTextInput from "~/components/CustomTextInput";
 import { getNoun } from "~/utils/getNoun";
+import { getTimesOfDay } from "~/utils/getTime";
+import Photolist from "./Photo/PhotoList";
+import DisplayPhoto from '~/components/DisplayPhoto';
 
 interface IAuthScreenProps {}
 
@@ -25,16 +28,22 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   } = useForm<FormInputs>({
     mode: "onBlur",
   });
-
   const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
-  const dispatch = useDispatch();
-  const [isPress, setIsPress] = useState(false);
+
   const offerSpecial = useSelector((state) => state.auth.offerSpecial);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(receiveOfferSpecial());
-    console.log('123--->', offerSpecial);
-  }, []);
+  }, [dispatch]);
+
+  const receiveAllPtoho = useCallback((data: TOfferSpecial[]) => data.map(item => {
+    return {
+      id_attachments: item.id,
+      filename: item.title,
+      content: `https:${item?.mobile}`,
+    }
+  }), []);
 
   // useEffect(() => {
   //   const subscription = watch((data) => {
@@ -66,8 +75,20 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
 
   return (
     <View style={styles.container}>
+      <View style={{
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+        zIndex: -1,
+        // alignItems: 'center',
+        // justifyContent: 'center',
+      }}>
+        {offerSpecial && offerSpecial?.length ? (
+          <DisplayPhoto data={receiveAllPtoho([offerSpecial[0]])} />
+        ) : null}
+      </View>
       <View style={styles.top}>
-        <Text style={styles.title}>Добрый вечер</Text>
+        <Text style={styles.title}>{getTimesOfDay()}</Text>
         <Text style={styles.description}>Для бронирования помещений заполните форму</Text>
       </View>
       <View style={styles.section}>
@@ -96,7 +117,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           placeholder="Ваша фамилия"
           prompt={"Фамилия"}
           // pattern={/^[а-яА-ЯёЁ]+$/} // TODO return
-          rules={{ pattern: /^[a-zA-Z]+$/ }}
+          rules={{ require: true, pattern: /^[a-zA-Z]+$/ }}
           textStyle={errors?.lastName
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("lastName")
@@ -182,6 +203,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     margin: 16,
+    backgroundColor: Colors.GrayLL,
   },
   top: {
     alignItems: 'center',

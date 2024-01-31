@@ -17,11 +17,12 @@
     "noEmit": true,
     "paths": {
       "~/*": ["./src/*"],
-      "colors": ["./src/styles/colors"]
+      // "colors": ["./src/styles/colors"],
+      // "utils": ["./src/utils"],
     },
     "resolveJsonModule": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es6",
     "useDefineForClassFields": true
   },
   "exclude": [

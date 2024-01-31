@@ -6,7 +6,7 @@ module.exports = (api) => {
   
   const presets = [
     'module:metro-react-native-babel-preset',
-    // '@babel/preset-env'
+    '@babel/preset-env',
   ];
   const plugins = [
     [
@@ -17,10 +17,14 @@ module.exports = (api) => {
             rootPathSuffix: 'src/',
             rootPathPrefix: '~/',
           },
-          {
-            rootPathSuffix: "./src/styles/colors",
-            rootPathPrefix: 'colors',
-          }
+          // {
+          //   rootPathSuffix: "./src/styles/colors",
+          //   rootPathPrefix: 'colors',
+          // },
+          // {
+          //   rootPathSuffix: "./src/utils",
+          //   rootPathPrefix: 'utils',
+          // }
         ]
       }
     ],

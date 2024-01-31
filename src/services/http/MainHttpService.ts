@@ -5,7 +5,7 @@ const MainHttpService = () => {
   const _API_GET_URL = 'https://api.pik.ru/v2/offer';
   const _API_POST_URL = 'https://strapi.pik.ru';
 
-  const tryParseJson = async (data: string) => {
+  const tryParseJson = async (data: any) => {
     try {
       return await JSON.parse(data);
     } catch (error: any) {
@@ -30,14 +30,12 @@ const MainHttpService = () => {
   return {
     receiveOfferSpecial: async () => {
       try {
-        const response: AxiosResponse<string, any> = await axios.get(
+        const response: AxiosResponse<TOfferSpecial[], any> = await axios.get(
             `${_API_GET_URL}/special?types=1,2&locations=2,3`
           );
 
-        const parseData = typeof response.data === 'string'
-        ? tryParseJson(response.data)
-        : null;
-
+        const parseData = tryParseJson(response.data);
+        // console.log('789--->', parseData);
         return parseData;
       } catch (error: any | AxiosError) {
         if (isAxiosError(error)) {

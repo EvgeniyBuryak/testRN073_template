@@ -16,6 +16,7 @@ export const receiveOfferSpecial = createAsyncThunk(
   'auth/receiveOfferSpecial',
   async () => {
     const response: TOfferSpecial[] = await HttpService.receiveOfferSpecial();
+    // console.log('456--->', response);
     return response;
   }
 );
