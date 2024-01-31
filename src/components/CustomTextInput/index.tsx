@@ -1,5 +1,5 @@
 import React from 'react';
-import { KeyboardTypeOptions, StyleSheet, TextInput, TextStyle } from 'react-native';
+import { KeyboardTypeOptions, StyleSheet, TextInput, TextStyle, Text, View } from 'react-native';
 import { Control, useController, FieldValues, RegisterOptions } from "react-hook-form";
 import Colors from '~/styles/colors';
 
@@ -13,6 +13,7 @@ const CustomTextInput: React.FC<{
   keyboardType?: KeyboardTypeOptions,
   rules?: Omit<RegisterOptions<FieldValues, string>, "valueAsNumber" | "valueAsDate" | "setValueAs" | "disabled"> | undefined,
   placeholderTextColor?: string,
+  prompt?: string,
 }> = ({
   name,
   control,
@@ -20,6 +21,7 @@ const CustomTextInput: React.FC<{
   pattern,
   textStyle,
   rules,
+  prompt,
   ...props
 }) => {
   const { field } = useController({
@@ -30,14 +32,28 @@ const CustomTextInput: React.FC<{
   });
   const { value, onChange, ref } = field;
   return (
-    <TextInput
-      {...props}
-      value={value}
-      onChangeText={onChange}
-      style={[styles.input, textStyle]}
-      ref={ref}
-      textAlign="left"
-    />
+    <View style={[styles.input, textStyle,
+      { lineHeight: 56, padding: 6 }
+    ]}>
+      {prompt?.length && value?.length ? (
+        <Text style={styles.prompt}>
+          {prompt}
+        </Text>
+      ) : null}
+        <TextInput
+          {...props}
+          value={value}
+          onChangeText={onChange}
+          style={
+              prompt?.length && value?.length ? 
+            styles.text : {
+              padding: 10
+            }
+          }
+          ref={ref}
+          textAlign="left"
+        />
+    </View>
   );
 }
 
@@ -50,9 +66,27 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 2,
     borderRadius: 4,
+    color: Colors.GrayD,
     borderColor: Colors.Gray,
+    backgroundColor: Colors.Gray,
     height: 56,
     padding: 16,
+  },
+  prompt: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: Colors.GrayM,
+    lineHeight: 16,
+    paddingLeft: 8,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: Colors.GrayD,
+    lineHeight: 24,
+    paddingLeft: 8,
+    position: "relative",
+    top: -8,
   },
 });
 

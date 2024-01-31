@@ -33,8 +33,6 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
     console.log('123--->', offerSpecial);
   }, []);
 
-  const watchButton = watch("number");
-
   // useEffect(() => {
   //   const subscription = watch((data) => {
   //     console.log(data);
@@ -48,6 +46,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   // console.log('isDirty---> ', isDirty)
   // console.log('dirtyFields---> ', dirtyFields)
   console.log('errors---> ', JSON.stringify(errors))
+  console.log('control---> ', JSON.stringify(control))
 
   render++;
 
@@ -74,12 +73,15 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           control={control}
           name="firstName"
           placeholder="Ваше имя"
+          prompt={"Имя"}
           required={true}
-          // pattern={/[а-яА-ЯёЁ]{1}/} // TODO return
+          // pattern={/^[а-яА-ЯёЁ]+$/} // TODO return
           pattern={/^[a-zA-Z]+$/}
           textStyle={errors?.firstName
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : {}
+            : watch("firstName")
+              ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
+                : {}
           }
           placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayM}
         />
@@ -88,6 +90,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           control={control}
           name="lastName"
           placeholder="Ваша фамилия"
+          prompt={"Фамилия"}
           pattern={/^[а-яА-ЯёЁ]+$/}
         />
         {renderError("lastName", "Требуется фамилия.")}
@@ -96,10 +99,13 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           name="phone"
           required={true}
           placeholder='Телефон'
+          prompt={"Телефон"}
           rules={{ required: true, pattern: /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/ }}
           textStyle={errors?.phone
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : {}
+            : watch("phone")
+              ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
+                : {}
           }
           placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayM}
         />
@@ -109,9 +115,12 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           name="email"
           rules={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
           placeholder="E-mail"
+          prompt={"E-mail"}
           textStyle={errors?.email
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : {}
+            : watch("email")
+              ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
+                : {}
           }
           placeholderTextColor={errors?.email ? Colors.Error : Colors.GrayM}
         />
@@ -124,20 +133,22 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           keyboardType="number-pad"
           textStyle={errors?.number
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : {}
+            : watch("number")
+              ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
+                : {}
           }
           placeholderTextColor={errors?.number ? Colors.Error : Colors.GrayM}
         />
         {renderError("number", "Вводить только цифры.")}
         <Button
-          title={watchButton
+          title={watch("number")
             ? `Забронировать ${getNoun(Number(getValues("number")), 'помещение', 'помещения', 'помещений')}`
             : 'Забронировать'
           }
           onPress={handleSubmit(onSubmit)}
           width={343}
           height={56}
-          disabled={!watchButton}
+          disabled={!watch(["firstName", "phone", "email", "number"])}
         />
       </View>
       <Text>Render: {render}</Text>
