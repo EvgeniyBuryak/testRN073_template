@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Colors from "~/styles/colors";
 import CustomTextInput from "~/components/CustomTextInput";
 import { getNoun } from "~/utils/getNoun";
-import { getTimesOfDay } from "~/utils/getTime";
+import { getTimesOfDay, getHours } from "~/utils/getTime";
 import Photolist from "./Photo/PhotoList";
 import DisplayPhoto from '~/components/DisplayPhoto';
 
@@ -24,18 +24,25 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
     getValues,
     watch,
     setFocus,
+    setValue,
     formState: { errors, isDirty, dirtyFields },
   } = useForm<FormInputs>({
     mode: "onBlur",
   });
-  const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
-
   const offerSpecial = useSelector((state) => state.auth.offerSpecial);
+  const resultFrontTest = useSelector((state) => state.auth.resultFrontTest);
   const dispatch = useDispatch();
-
+  
   useEffect(() => {
     dispatch(receiveOfferSpecial());
   }, [dispatch]);
+
+  const onSubmit = (data: any) => {
+    data.time = getHours();
+    dispatch(sendFrontTest(data));
+    console.log('data--->', JSON.stringify(data));
+    // Alert.alert(JSON.stringify(resultFrontTest));
+  };
 
   const receiveAllPtoho = useCallback((data: TOfferSpecial[]) => data.map(item => {
     return {
@@ -58,6 +65,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   // console.log('isDirty---> ', isDirty)
   // console.log('dirtyFields---> ', dirtyFields)
   console.log('errors---> ', JSON.stringify(errors))
+  console.log('resultFrontTest--->', JSON.stringify(resultFrontTest));
 
   render++;
 
@@ -80,8 +88,6 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
         width: '100%',
         position: 'absolute',
         zIndex: -1,
-        // alignItems: 'center',
-        // justifyContent: 'center',
       }}>
         {offerSpecial && offerSpecial?.length ? (
           <DisplayPhoto data={receiveAllPtoho([offerSpecial[0]])} />
@@ -103,7 +109,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("firstName")
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
-                : {}
+              : {}
           }
           placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayM}
           onSubmitEditing={() => {
@@ -122,7 +128,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("lastName")
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
-                : {}
+              : {}
           }
           onSubmitEditing={() => {
             setFocus("phone");
@@ -139,57 +145,57 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("phone")
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
-                : {}
+              : {}
           }
           placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayM}
           onSubmitEditing={() => {
-            setFocus("email");
+            setFocus("mail");
           }}
         />
         {renderError("phone", "Требуется номер телефона.")}
         <CustomTextInput
           control={control}
-          name="email"
+          name="mail"
           rules={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
           placeholder="E-mail"
           prompt={"E-mail"}
-          textStyle={errors?.email
+          textStyle={errors?.mail
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : watch("email")
+            : watch("mail")
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
-                : {}
+              : {}
           }
-          placeholderTextColor={errors?.email ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.mail ? Colors.Error : Colors.GrayM}
           onSubmitEditing={() => {
-            setFocus("number");
+            setFocus("flatsCount");
           }}
           
         />
-        {renderError("email", "Требуется электронная почта.")}
+        {renderError("mail", "Требуется электронная почта.")}
         <CustomTextInput
           control={control}
-          name="number"
+          name="flatsCount"
           placeholder="Укажите количество помещений"
           rules={{ required: true, pattern: /^[0-9]+$/ }}
           keyboardType="number-pad"
-          textStyle={errors?.number
+          textStyle={errors?.flatsCount
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
-            : watch("number")
+            : watch("flatsCount")
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
-                : {}
+              : {}
           }
-          placeholderTextColor={errors?.number ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.flatsCount ? Colors.Error : Colors.GrayM}
         />
-        {renderError("number", "Вводить только цифры.")}
+        {renderError("flatsCount", "Вводить только цифры.")}
         <Button
-          title={watch("number")
-            ? `Забронировать ${getNoun(Number(getValues("number")), 'помещение', 'помещения', 'помещений')}`
+          title={watch("flatsCount")
+            ? `Забронировать ${getNoun(Number(getValues("flatsCount")), 'помещение', 'помещения', 'помещений')}`
             : 'Забронировать'
           }
           onPress={handleSubmit(onSubmit)}
           width={343}
           height={56}
-          disabled={!watch(["firstName", "phone", "email", "number"])}
+          disabled={!watch(["firstName", "phone", "mail", "flatsCount"])}
         />
       </View>
       <Text>Render: {render}</Text>

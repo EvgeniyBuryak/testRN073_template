@@ -32,3 +32,10 @@ type TOverviewPhoto = {
   filename: string;
   content: string;
 };
+
+type TSendFrontText = {
+  user: TSimpleObject,
+  order: TSimpleObject,
+};
+
+type TSimpleObject = { [key: string]: string };

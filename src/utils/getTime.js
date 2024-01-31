@@ -1,5 +1,7 @@
-export const getTimesOfDay = () => {
-    const hour = new Date().getHours();
+const getHours = () => new Date().getHours();
+
+const getTimesOfDay = () => {
+    const hour = getHours();
     // night, morning, afternoon, evening
     if(0 <= hour && 6 >= hour) {
         return "Доброй ночи"
@@ -10,4 +12,6 @@ export const getTimesOfDay = () => {
     } else if(18 <= hour && 24 >= hour) {
         return "Добрый вечер"
     }
-}
+};
+
+export { getTimesOfDay, getHours }

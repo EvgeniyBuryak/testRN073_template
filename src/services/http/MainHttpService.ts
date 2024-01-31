@@ -33,9 +33,7 @@ const MainHttpService = () => {
         const response: AxiosResponse<TOfferSpecial[], any> = await axios.get(
             `${_API_GET_URL}/special?types=1,2&locations=2,3`
           );
-
         const parseData = tryParseJson(response.data);
-        // console.log('789--->', parseData);
         return parseData;
       } catch (error: any | AxiosError) {
         if (isAxiosError(error)) {
@@ -45,22 +43,18 @@ const MainHttpService = () => {
         }
       }
     },
-    sendFrontTest: async () => {
+    sendFrontTest: async (data: TSendFrontText) => {
       try {
         const response: AxiosResponse<TFrontTest, any> = await axios.post(
           `${_API_POST_URL}/front-tests`
-        );
-
-        const parseData = typeof response.data === 'string'
-        ? tryParseJson(response.data)
-        : null;
-
+        , data);
+        const parseData = tryParseJson(response.data);
         return parseData;
       } catch (error: any | AxiosError) {
         if (isAxiosError(error)) {
           handleErrors(error)
         } else {
-          console.error('*---sendTest', error);
+          console.error('*---sendFrontTest', error);
         }
       }
     },
