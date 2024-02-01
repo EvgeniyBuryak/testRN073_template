@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, Pressable, ViewStyle } from 'react-native';
+import { StyleSheet, Text, Pressable, ViewStyle, ActivityIndicator } from 'react-native';
 import Colors from 'colors';
 
 interface IButtonProps {
@@ -12,6 +12,7 @@ interface IButtonProps {
   height?: number;
   fontSize?: number;
   stylesView?: ViewStyle;
+  loading?: boolean;
 }
 
 const Button: React.FC<IButtonProps> = ({
@@ -24,6 +25,7 @@ const Button: React.FC<IButtonProps> = ({
   height,
   fontSize,
   stylesView,
+  loading,
 }: IButtonProps) => {
   return (
     <Pressable
@@ -40,14 +42,18 @@ const Button: React.FC<IButtonProps> = ({
       ]}
       onPress={onPress}
     >
-      <Text style={
-        [styles.buttonTitle, {
-          color: disabled
-              ? Colors.GrayL
-              : Colors.White,
-          fontSize,
-        }
-        ]}>{title}</Text>
+      {loading ? (
+        <ActivityIndicator size='small' color={Colors.White} />
+      ) : (
+        <Text style={
+          [styles.buttonTitle, {
+            color: disabled
+                ? Colors.GrayL
+                : Colors.White,
+            fontSize,
+          }
+        ]}>{title}</Text>        
+      )}
     </Pressable>
   );
 };

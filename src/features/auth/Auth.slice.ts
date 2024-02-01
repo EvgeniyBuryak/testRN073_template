@@ -4,12 +4,14 @@ import HttpService from '~/services/http/MainHttpService';
 
 interface AuthState {
   isAuthorized?: boolean;
+  isLoading: boolean;
   offerSpecial?: TOfferSpecial[];
   resultFrontTest?: TFrontTest;
 }
 
 const initialState: AuthState = {
   isAuthorized: undefined,
+  isLoading: false,
   offerSpecial: undefined,
   resultFrontTest: undefined,
 };
@@ -41,6 +43,9 @@ const authSlice = createSlice({
     setAuthorizationStatus: (state, action) => {
       state.isAuthorized = action.payload;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,6 +54,10 @@ const authSlice = createSlice({
     })
     .addCase(sendFrontTest.fulfilled, (state, action) => {
       state.resultFrontTest = action.payload;
+      state.isLoading = false;
+    })
+    .addCase(sendFrontTest.pending, (state, action) => {
+      state.isLoading = true;
     })
   },
 });

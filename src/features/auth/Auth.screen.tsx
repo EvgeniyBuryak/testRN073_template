@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
 import { useForm } from "react-hook-form";
 import Button from '~/components/Button';
@@ -8,7 +8,6 @@ import Colors from "~/styles/colors";
 import CustomTextInput from "~/components/CustomTextInput";
 import { getNoun } from "~/utils/getNoun";
 import { getTimesOfDay, getHours } from "~/utils/getTime";
-import DisplayPhoto from '~/components/DisplayPhoto';
 
 interface IAuthScreenProps {}
 
@@ -28,8 +27,9 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
   } = useForm<FormInputs>({
     mode: "onBlur",
   });
-  const offerSpecial = useSelector((state) => state.auth.offerSpecial);
+  // const offerSpecial = useSelector((state) => state.auth.offerSpecial); // get array images
   const resultFrontTest = useSelector((state) => state.auth.resultFrontTest);
+  const isLoading = useSelector((state) => state.auth.isLoading);
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -184,7 +184,8 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           onPress={handleSubmit(onSubmit)}
           width={343}
           height={56}
-          disabled={!watch(["firstName", "phone", "mail", "flatsCount"])}
+          disabled={!watch(["firstName", "phone", "mail", "flatsCount"] && isLoading)}
+          loading={isLoading}
         />
       </View>
       <Text>Render: {render}</Text>
