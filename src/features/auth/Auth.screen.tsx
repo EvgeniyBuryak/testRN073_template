@@ -8,7 +8,6 @@ import Colors from "~/styles/colors";
 import CustomTextInput from "~/components/CustomTextInput";
 import { getNoun } from "~/utils/getNoun";
 import { getTimesOfDay, getHours } from "~/utils/getTime";
-import Photolist from "./Photo/PhotoList";
 import DisplayPhoto from '~/components/DisplayPhoto';
 
 interface IAuthScreenProps {}
@@ -83,16 +82,6 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={{
-        height: '100%',
-        width: '100%',
-        position: 'absolute',
-        zIndex: -1,
-      }}>
-        {offerSpecial && offerSpecial?.length ? (
-          <DisplayPhoto data={receiveAllPtoho([offerSpecial[0]])} />
-        ) : null}
-      </View>
       <View style={styles.top}>
         <Text style={styles.title}>{getTimesOfDay()}</Text>
         <Text style={styles.description}>Для бронирования помещений заполните форму</Text>
