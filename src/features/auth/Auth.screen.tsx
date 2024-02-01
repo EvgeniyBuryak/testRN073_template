@@ -123,7 +123,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
           placeholder="Ваша фамилия"
           prompt={"Фамилия"}
           // pattern={/^[а-яА-ЯёЁ]+$/} // TODO return
-          rules={{ require: true, pattern: /^[a-zA-Z]+$/ }}
+          rules={{ required: true, pattern: /^[a-zA-Z]+$/ }}
           textStyle={errors?.lastName
             ? { borderColor: Colors.Error, backgroundColor: Colors.BackError }
             : watch("lastName")

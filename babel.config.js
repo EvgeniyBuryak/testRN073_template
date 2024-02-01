@@ -17,10 +17,10 @@ module.exports = (api) => {
             rootPathSuffix: 'src/',
             rootPathPrefix: '~/',
           },
-          // {
-          //   rootPathSuffix: "./src/styles/colors",
-          //   rootPathPrefix: 'colors',
-          // },
+          {
+            rootPathSuffix: "./src/styles/colors",
+            rootPathPrefix: 'colors',
+          },
           // {
           //   rootPathSuffix: "./src/utils",
           //   rootPathPrefix: 'utils',
