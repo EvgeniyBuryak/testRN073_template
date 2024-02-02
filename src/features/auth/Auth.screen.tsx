@@ -100,7 +100,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
               : {}
           }
-          placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.firstName ? Colors.Error : Colors.GrayD}
           onSubmitEditing={() => {
             setFocus("lastName");
           }}
@@ -119,6 +119,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
               : {}
           }
+          placeholderTextColor={errors?.lastName ? Colors.Error : Colors.GrayD}
           onSubmitEditing={() => {
             setFocus("phone");
           }}
@@ -136,7 +137,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
               : {}
           }
-          placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.phone ? Colors.Error : Colors.GrayD}
           onSubmitEditing={() => {
             setFocus("mail");
           }}
@@ -154,7 +155,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
               : {}
           }
-          placeholderTextColor={errors?.mail ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.mail ? Colors.Error : Colors.GrayD}
           onSubmitEditing={() => {
             setFocus("flatsCount");
           }}
@@ -173,7 +174,7 @@ const AuthScreen: React.FC<IAuthScreenProps> = (props: IAuthScreenProps) => {
               ? { borderColor: Colors.Gray, backgroundColor: Colors.GrayLL }
               : {}
           }
-          placeholderTextColor={errors?.flatsCount ? Colors.Error : Colors.GrayM}
+          placeholderTextColor={errors?.flatsCount ? Colors.Error : Colors.GrayD}
         />
         {renderError("flatsCount", "Вводить только цифры.")}
         <Button
